@@ -5,6 +5,7 @@
 import CookieButton from "./components/CookieButton";
 import CookieCount from "./components/CookieCount";
 import { useState } from "react";
+import { useEffect } from "react";
 
 export default function App() {
 
@@ -12,23 +13,28 @@ export default function App() {
     
     //I need TWO state variables to store two values --> one state to track the number of cookies, and one state to trach the cookies per second (cps)
     const [cookies, setCookies] = useState(0);
-    //useState()
+    const [cps] = useState(1);   
+    
+
+    function cookieUp () {
+        setCookies (cookies + 1);
+    }
+   
   
     //this block of code is very useful. What does it do?
-     //useEffect(() => {
-     //  const myInterval = setInterval(() => {
-     //   setCookies((currentCookies) => {
-     //     currentCookies + cps;
-    //    });
-    //  }, 1000);
-    //  return () => {
-    //    clearInterval(myInterval);
-    //  };
-    //}, [cps]);
+     useEffect(() => {
+       const myInterval = setInterval(() => {
+        setCookies((currentCookies) => {
+          return currentCookies + cps;
+        });
+      }, 1000);
+     return () => {
+        clearInterval(myInterval);
+      };
+    }, [cps]);
   
-    function cookieUp () {
-            setCookies (cookies + 1);
-        }
+    
+    
         
     //we need some logic for the shop upgrades (cookies go down, cps goes up)
     //write your logic here!
@@ -37,7 +43,7 @@ export default function App() {
       <>
       
         <h1>Cookie Clicker</h1>
-      <CookieCount cookies={cookies}/>
+      <CookieCount cookies={cookies} cps={cps}/>
       <CookieButton cookieUp={cookieUp} />
     
       </>
